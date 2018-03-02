@@ -2,25 +2,24 @@
  * @file mofron-effect-center/index.js
  * @author simpart
  */
+let mf = require('mofron');
 
 /**
  * @class mofron.effect.Center
  * @brief center effect class
  */
-mofron.effect.Center = class extends mofron.Effect {
+mf.effect.Center = class extends mf.Effect {
     
     constructor (p_xflg, yflg) {
         try {
-            super();
+            super(p_xflg);
             this.name('Center');
             
             if ('boolean' === typeof p_xflg) {
                 this.xflag(p_xflg);
-                if ('boolean' === typeof yflg) {
-                    this.yflag(yflg);
-                }
-            } else {
-                this.prmOpt(p_xflg);
+            }
+            if ('boolean' === typeof yflg) {
+                this.yflag(yflg);
             }
         } catch (e) {
             console.error(e.stack);
@@ -67,6 +66,7 @@ mofron.effect.Center = class extends mofron.Effect {
             let info = this.getInfo();
             if (true === this.xflag()) {
                 tgt.style({
+                    'display'      : 'flex',
                     'margin-left'  : 'auto',
                     'margin-right' : 'auto'
                 });
@@ -97,6 +97,7 @@ mofron.effect.Center = class extends mofron.Effect {
         try {
             if (true === this.xflag()) {
                 tgt.style({
+                    'display'      : null,
                     'margin-left'  : null,
                     'margin-right' : null
                 });
@@ -143,5 +144,4 @@ mofron.effect.Center = class extends mofron.Effect {
         }
     }
 }
-mofron.effect.center = {};
 module.exports = mofron.effect.Center;
