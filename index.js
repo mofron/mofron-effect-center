@@ -27,6 +27,47 @@ mf.effect.Center = class extends mf.Effect {
         }
     }
     
+    target (prm) {
+        try {
+            let ret = super.target(prm);
+            if (undefined === ret) {
+                if (null === this.target().parent()) {
+                    super.target().parentListener(
+                        (tgt, eff) => {
+                            try {
+                                let pnt = tgt.parent();
+                                pnt.target().styleListener(
+                                    'height',
+                                    eff.pntResizeEvent,
+                                    [pnt, eff]
+                                ); 
+                            } catch (e) {
+                                console.error(e.stack);
+                                throw e;
+                            }
+                        },
+                        this
+                    );
+                }
+            }
+            return ret;
+        } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    pntResizeEvent (prm) {
+        try {
+            if (prm[1].target().parent().getId() === prm[0].getId()) {
+                prm[1].execute(true);
+            }
+        } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
     xflag (flg) {
         try {
             if (undefined === flg) {
