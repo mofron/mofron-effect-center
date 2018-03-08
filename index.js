@@ -49,6 +49,18 @@ mf.effect.Center = class extends mf.Effect {
                         this
                     );
                 }
+                this.target().target().styleListener(
+                    'height',
+                    (eff) => {
+                        try {
+                            eff.execute(true);
+                        } catch (e) {
+                            console.error(e.stack);
+                            throw e;
+                        }
+                    },
+                    this
+                );
             }
             return ret;
         } catch (e) {
