@@ -12,13 +12,12 @@ mf.effect.Center = class extends mf.Effect {
     
     constructor (p_xflg, yflg) {
         try {
-            super(p_xflg);
+            super();
             this.name('Center');
             
-            if ('boolean' === typeof p_xflg) {
+            this.prmOpt(p_xflg, yflg);
+            if (null !== this.param()) {
                 this.xflag(p_xflg);
-            }
-            if ('boolean' === typeof yflg) {
                 this.yflag(yflg);
             }
         } catch (e) {
@@ -118,11 +117,7 @@ mf.effect.Center = class extends mf.Effect {
         try {
             let info = this.getInfo();
             if (true === this.xflag()) {
-                tgt.style({
-                    'display'      : 'flex',
-                    'margin-left'  : 'auto',
-                    'margin-right' : 'auto'
-                });
+                this.enable_x(tgt);
             }
             
             if (true === this.yflag()) {
@@ -146,14 +141,90 @@ mf.effect.Center = class extends mf.Effect {
         }
     }
     
+    enable_x (tgt) {
+        try {
+            let wid = tgt.width();
+            if ( (true   === mf.func.isInclude(tgt, 'Text')) &&
+                 (null   !== tgt.parent()) &&
+                 ('flex' !== tgt.parent().style('display')) ) {
+                tgt.style({
+                    'text-align' : 'center'
+                });
+            } else if (null !== wid) {
+                tgt.style({
+                    'position' : 'relative',
+                    'left'     : '50%',
+                });
+                
+                if ('string' === typeof wid) {
+                    if (undefined === tgt.width().split('%')[0]) {
+                        throw new Error('invalid width');
+                    }
+                    wid = parseInt(tgt.width().split('%')[0]);
+                    if ('number' === typeof wid) {
+                        tgt.style({
+                            'margin-left' : '-' + (wid/2) + '%'
+                        });
+                    }
+                } else {
+                    tgt.style({
+                        'margin-left' : '-' + (wid/2) + 'px'
+                    });
+                }
+            } else {
+                if (null !== tgt.parent()) {
+                    tgt.parent().style({
+                        'display' : 'flex'
+                    });
+                } else {
+                    tgt.parentListener(
+                        ()=>{
+                            try {
+                                tgt.parent().style({
+                                    'display' : 'flex'
+                                });
+                            } catch (e) {
+                                console.error(e.stack);
+                                throw e;
+                            }
+                        }
+                    );
+                }
+                tgt.style({
+                    'margin-left'  : 'auto',
+                    'margin-right' : 'auto'
+                });
+            }
+        } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
     disable (tgt) {
         try {
             if (true === this.xflag()) {
+                if ( (true   === mf.func.isInclude(tgt, 'Text')) &&
+                     (null   !== tgt.parent()) &&
+                     ('flex' !== tgt.parent().style('display')) ) {
+                    tgt.style({
+                        'text-align' : null
+                    });
+                }
                 tgt.style({
-                    'display'      : null,
                     'margin-left'  : null,
                     'margin-right' : null
                 });
+                if (null !== tgt.width()) {
+                    tgt.style({
+                        'position'     : null,
+                        'left'         : null,
+                    });
+                } else {
+                    tgt.parent().style({
+                        'display' : null
+                    });
+                }
             }
             
             if (true === this.yflag()) {
@@ -198,3 +269,4 @@ mf.effect.Center = class extends mf.Effect {
     }
 }
 module.exports = mofron.effect.Center;
+/* end of file */
