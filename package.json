@@ -1,6 +1,6 @@
 {
   "name": "mofron-effect-center",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "center effect for mofron",
   "main": "index.js",
   "scripts": {

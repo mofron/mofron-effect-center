@@ -26,59 +26,6 @@ mf.effect.Center = class extends mf.Effect {
         }
     }
     
-    target (prm) {
-        try {
-            let ret = super.target(prm);
-            //if (undefined === ret) {
-                //if (null === this.target().parent()) {
-                    //super.target().parentListener(
-                    //    (tgt, eff) => {
-                    //        try {
-                    //            let pnt = tgt.parent();
-                    //            pnt.target().styleListener(
-                    //                'height',
-                    //                eff.pntResizeEvent,
-                    //                [pnt, eff]
-                    //            ); 
-                    //        } catch (e) {
-                    //            console.error(e.stack);
-                    //            throw e;
-                    //        }
-                    //    },
-                    //    this
-                    //);
-                //}
-                //this.target().target().styleListener(
-                //    'height',
-                //    (eff) => {
-                //        try {
-                //            eff.execute(true);
-                //        } catch (e) {
-                //            console.error(e.stack);
-                //            throw e;
-                //        }
-                //    },
-                //    this
-                //);
-            //}
-            return ret;
-        } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-    
-    //pntResizeEvent (prm) {
-    //    try {
-    //        //if (prm[1].target().parent().getId() === prm[0].getId()) {
-    //        //    prm[1].execute(true);
-    //        //}
-    //    } catch (e) {
-    //        console.error(e.stack);
-    //        throw e;
-    //    }
-    //}
-    
     xflag (flg) {
         try {
             if (undefined === flg) {
@@ -197,6 +144,12 @@ mf.effect.Center = class extends mf.Effect {
                     'margin-top'    : 'auto',
                     'margin-bottom' : 'auto'
                 });
+            } else if ( (true === mf.func.isInclude(tgt, 'Text')) &&
+                        (null !== tgt.parent()) ) {
+                tgt.parent().style({
+                    'display'     : 'flex',
+                    'align-items' : 'center'
+                });
             } else {
                 tgt.style({
                     'position' : 'relative',
@@ -210,36 +163,6 @@ mf.effect.Center = class extends mf.Effect {
             throw e;
         }
     }
-    
-    //isEnableVertHei () {
-    //    try {
-    //        return (undefined === this.m_verthei) ? false : this.m_verthei;
-    //    } catch (e) {
-    //        console.error(e.stack);
-    //        throw e;
-    //    }
-    //}
-    
-    //resetVertHei () {
-    //    try {
-    //        let pnt  = this.target().parent();
-    //        let phei = (null === pnt) ? window.innerHeight : pnt.height();
-    //        let thei = this.target().height();
-    //        if ( (null === phei) || (null === thei) ) {
-    //            throw new Error('could not get size value');
-    //        }
-    //        if (phei > thei) {
-    //            this.target().style({
-    //                position : 'relative',
-    //                top      : (phei - thei)/2 + 'px'
-    //            });
-    //        }
-    //        this.m_verthei = true;
-    //    } catch (e) {
-    //        console.error(e.stack);
-    //        throw e;
-    //    }
-    //}
     
     disable (tgt) {
         try {
@@ -277,36 +200,6 @@ mf.effect.Center = class extends mf.Effect {
             throw e;
         }
     }
-    
-    //getInfo () {
-    //    try {
-    //        let ret_val = {
-    //            parent : {},
-    //            target : null
-    //        };
-    //        let pnt = this.target().parent();
-    //        
-    //        /* get parent info */
-    //        if (null === pnt) {
-    //            let size  = [null, null];
-    //            let style = document.body.style;
-    //            ret_val.parent.width  = ((undefined === style['width']) || ('' === style['width'])) ?
-    //                                        window.innerWidth : mofron.func.getLength(style['width']);
-    //            ret_val.parent.height = ((undefined === style['height']) || ('' === style['height'])) ?
-    //                                        window.innerHeight : mofron.func.getLength(style['height']);
-    //        } else {
-    //            ret_val.parent = mofron.func.getCompSize(pnt);
-    //        }
-    //        
-    //        /* get target info */
-    //        ret_val.target = mofron.func.getCompSize(this.target());
-    //        
-    //        return ret_val;
-    //    } catch (e) {
-    //        console.error(e.stack);
-    //        throw e;
-    //    }
-    //}
 }
 module.exports = mofron.effect.Center;
 /* end of file */
