@@ -26,6 +26,21 @@ mf.effect.Center = class extends mf.Effect {
         }
     }
     
+    enableFlag (x, y) {
+        try {
+            if (undefined === x) {
+                /* getter */
+                return [this.xflag(), this.yflag()];
+            }
+            /* setter */
+            this.xflag(x);
+            this.yflag(y);
+        } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
     xflag (flg) {
         try {
             if (undefined === flg) {
@@ -87,7 +102,7 @@ mf.effect.Center = class extends mf.Effect {
                 });
             } else if (null !== wid) {
                 tgt.style({
-                    'position' : 'relative',
+                    'position' : this.posiType(),
                     'left'     : '50%',
                 });
                 
@@ -152,7 +167,7 @@ mf.effect.Center = class extends mf.Effect {
                 });
             } else {
                 tgt.style({
-                    'position' : 'relative',
+                    'position' : this.posiType(),
                     'top'      : '50%'     ,
                     '-webkit-transform' : 'translateY(-50%)',
                     'transform'         : 'translateY(-50%)'
@@ -195,6 +210,23 @@ mf.effect.Center = class extends mf.Effect {
                     'top' : null
                 });
             }
+        } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    posiType (prm) {
+        try {
+            if (undefined === prm) {
+                /* getter */
+                return (undefined === this.m_positype) ? 'relative' : this.m_positype;
+            }
+            /* setter */
+            if ('string' !== typeof prm) {
+                throw new Error('invalid parameter');
+            }
+            this.m_positype = prm;
         } catch (e) {
             console.error(e.stack);
             throw e;
