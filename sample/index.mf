@@ -1,0 +1,8 @@
+<setting>
+    <tag load="mofron-comp-text">Text</tag>
+    <tag load="mofron-effect-center">Center</tag>
+</setting>
+
+<div base-color=#f0e6fa height=2rem>
+    <Text size=0.8rem effect=Center>Center Text</Text>
+</div>

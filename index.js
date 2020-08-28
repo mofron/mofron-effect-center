@@ -1,237 +1,55 @@
 /**
  * @file mofron-effect-center/index.js
- * @author simpart
+ * @brief center effect module for mofron
+ *        this effect centers the placement of components vertically and horizontally
+ * @license MIT
  */
-let mf = require('mofron');
+const cmputl = mofron.util.component;
 
-/**
- * @class mofron.effect.Center
- * @brief center effect class
- */
-mf.effect.Center = class extends mf.Effect {
-    
-    constructor (p_xflg, yflg) {
+module.exports = class extends mofron.class.Effect {
+    /**
+     * initialize effect
+     * 
+     * @param (mixed) key-value: effect config
+     * @type private
+     */
+    constructor (p1) {
         try {
             super();
-            this.name('Center');
+            this.modname("Center");
             
-            this.prmOpt(p_xflg, yflg);
-            if (null !== this.param()) {
-                this.xflag(p_xflg);
-                this.yflag(yflg);
-            }
+	    if (0 < arguments.length) {
+                this.config(p1);
+	    }
         } catch (e) {
             console.error(e.stack);
             throw e;
         }
     }
     
-    enableFlag (x, y) {
+    /**
+     * effect contents
+     * 
+     * @type private
+     */
+    contents (cmp) {
         try {
-            if (undefined === x) {
-                /* getter */
-                return [this.xflag(), this.yflag()];
-            }
-            /* setter */
-            this.xflag(x);
-            this.yflag(y);
-        } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-    
-    xflag (flg) {
-        try {
-            if (undefined === flg) {
-                /* getter */
-                return (undefined === this.m_xflag) ? true : this.m_xflag;
-            }
-            /* setter */
-            if ('boolean' !== typeof flg) {
-                throw new Error('invalid parameter');
-            }
-            this.m_xflag = flg;
-        } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-    
-    yflag (flg) {
-        try {
-            if (undefined === flg) {
-                /* getter */
-                return (undefined === this.m_yflag) ? true : this.m_yflag;
-            }
-            /* setter */
-            if ('boolean' !== typeof flg) {
-                throw new Error('invalid parameter');
-            }
-            this.m_yflag = flg;
-        } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-    
-    enable (tgt) {
-        try {
-            if (true === this.xflag()) {
-                this.enable_x(tgt);
-            }
-            
-            if (true === this.yflag()) {
-                this.enable_y(tgt);
-            }
-            
-        } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-    
-    enable_x (tgt) {
-        try {
-            let wid = tgt.width();
-            if ( (true   === mf.func.isInclude(tgt, 'Text')) &&
-                 (null   !== tgt.parent()) &&
-                 ('flex' !== tgt.parent().style('display')) ) {
-                tgt.style({
-                    'text-align' : 'center'
-                });
-            } else if (null !== wid) {
-                tgt.style({
-                    'position' : this.posiType(),
-                    'left'     : '50%',
-                });
-                
-                if ('string' === typeof wid) {
-                    if (undefined === tgt.width().split('%')[0]) {
-                        throw new Error('invalid width');
-                    }
-                    wid = parseInt(tgt.width().split('%')[0]);
-                    if ('number' === typeof wid) {
-                        tgt.style({
-                            'margin-left' : '-' + (wid/2) + '%'
-                        });
-                    }
-                } else {
-                    tgt.style({
-                        'margin-left' : '-' + (wid/2) + 'px'
-                    });
-                }
-            } else {
-                if (null !== tgt.parent()) {
-                    tgt.parent().style({
-                        'display' : 'flex'
-                    });
-                } else {
-                    tgt.parentListener(
-                        ()=>{
-                            try {
-                                tgt.parent().style({
-                                    'display' : 'flex'
-                                });
-                            } catch (e) {
-                                console.error(e.stack);
-                                throw e;
-                            }
-                        }
-                    );
-                }
-                tgt.style({
-                    'margin-left'  : 'auto',
-                    'margin-right' : 'auto'
-                });
-            }
-        } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-    
-    enable_y (tgt) {
-        try {
-            if (true === mf.func.isInclude(tgt, 'Image')) {
-                tgt.style({
-                    'display'       : 'block',
-                    'margin-top'    : 'auto',
-                    'margin-bottom' : 'auto'
-                });
-            } else if ( (true === mf.func.isInclude(tgt, 'Text')) &&
-                        (null !== tgt.parent()) ) {
-                tgt.parent().style({
-                    'display'     : 'flex',
-                    'align-items' : 'center'
-                });
-            } else {
-                tgt.style({
-                    'position' : this.posiType(),
-                    'top'      : '50%'     ,
-                    '-webkit-transform' : 'translateY(-50%)',
-                    'transform'         : 'translateY(-50%)'
-                });
-            }
-        } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-    
-    disable (tgt) {
-        try {
-            if (true === this.xflag()) {
-                if ( (true   === mf.func.isInclude(tgt, 'Text')) &&
-                     (null   !== tgt.parent()) &&
-                     ('flex' !== tgt.parent().style('display')) ) {
-                    tgt.style({
-                        'text-align' : null
-                    });
-                }
-                tgt.style({
-                    'margin-left'  : null,
-                    'margin-right' : null
-                });
-                if (null !== tgt.width()) {
-                    tgt.style({
-                        'position'     : null,
-                        'left'         : null,
-                    });
-                } else {
-                    tgt.parent().style({
-                        'display' : null
-                    });
-                }
-            }
-            
-            if (true === this.yflag()) {
-                tgt.style({
-                    'top' : null
-                });
-            }
-        } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-    
-    posiType (prm) {
-        try {
-            if (undefined === prm) {
-                /* getter */
-                return (undefined === this.m_positype) ? 'relative' : this.m_positype;
-            }
-            /* setter */
-            if ('string' !== typeof prm) {
-                throw new Error('invalid parameter');
-            }
-            this.m_positype = prm;
+	     if (null === cmp.parent()) {
+                 console.warn("could not find parent component,the center effect is invalid");
+		 return;
+	     }
+             cmp.parent().childDom().style({ "display" : "grid" });
+	     cmputl.rstyle(
+	         cmp,
+                 {
+		     "display"     : "grid",
+		     "place-items" : "center"
+		 }
+             );
         } catch (e) {
             console.error(e.stack);
             throw e;
         }
     }
 }
-module.exports = mofron.effect.Center;
 /* end of file */
